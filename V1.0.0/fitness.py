@@ -24,4 +24,12 @@ def fitness(x):
     print(" x is")
     print(x)
     return float(mean(x))
-    
+
+#insert the new member in the population according to his fitness
+#   member: bit vector to be placed
+#   population: array of bit vector where it has to be inserted
+def insert(member,population):
+    for i in range(len(population)):
+        if(fitness(member)<=fitness(population[i])): 
+            population.insert(i,member)
+            break
