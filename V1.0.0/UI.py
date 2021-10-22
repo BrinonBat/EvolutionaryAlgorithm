@@ -60,7 +60,6 @@ def show(csv_name):
     plt.xlabel("cycles")
     plt.xticks(cycles)
     plt.ylabel("value")
-    plt.title(csv_name)
     plt.grid()
     plt.legend()
     plt.savefig("V1.0.0/results/"+csv_name+".png")
