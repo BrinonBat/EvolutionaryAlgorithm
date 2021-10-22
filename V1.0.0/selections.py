@@ -1,7 +1,11 @@
+import fitness
+
 #parent selection functions
 def parent1(population):
-    pass
+    return population[-4:]
 
 #survivor selection functions
 def survivor1(population,offspring):
-    pass
+    for member in offspring:
+        fitness.insert(member,population)
+        population.pop(0)

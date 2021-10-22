@@ -10,7 +10,6 @@ def evaluation(population):
     print(population)
     for i in range(len(population)):
         pop_fit.append(fitness(population[i]))
-
     #calculate statistics
     fit_mean=mean(pop_fit)
     std_dev=pstdev(pop_fit,mu=fit_mean)
@@ -21,8 +20,6 @@ def evaluation(population):
 #   x: bit vector to be tested
 #   return a float in [0,1]
 def fitness(x):
-    print(" x is")
-    print(x)
     return float(mean(x))
 
 #insert the new member in the population according to his fitness
@@ -32,4 +29,5 @@ def insert(member,population):
     for i in range(len(population)):
         if(fitness(member)<=fitness(population[i])): 
             population.insert(i,member)
-            break
+            return
+    population.append(member)
