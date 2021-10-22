@@ -7,7 +7,7 @@ Evolutionari Algorithm used to solve the one-max problem. It can be used for any
  - [x] plot system
  - [x] end conditions
  - [ ] mutation functions
- - [ ] fitness functions
+ - [x] fitness functions
  - [ ] selection functions
  - [ ] mutation functions
  - [ ] list configurations to be tested
