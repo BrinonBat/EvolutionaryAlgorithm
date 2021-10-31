@@ -16,3 +16,12 @@ Evolutionari Algorithm used to solve the one-max problem. It can be used for any
  - [ ] tests on it
  - [ ] read papers about the problem and state of the art solutions
  - [ ] new versions 
+
+ ### About versions
+
+ Versions have the following pattern: 
+ 
+ for X.Y.Z
+ X = structure version
+ Y = set of functions used version
+ Z {0,5} : 0 = ordered by fitness , 5 = ordered by age (youngest first)
