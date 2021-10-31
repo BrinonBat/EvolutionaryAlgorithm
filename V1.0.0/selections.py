@@ -24,7 +24,7 @@ def bestOfAFourth(population,offspring):
     print(selecteds)
     selecteds=sorted(selecteds)[-out:]
     print(selecteds)
-    for mem in selecteds:
-        population.pop(mem)
+    for i in range (out):
+        population.pop(selecteds[i]-i)
 
     print(population)
