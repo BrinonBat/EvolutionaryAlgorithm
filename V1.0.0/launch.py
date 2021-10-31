@@ -40,7 +40,7 @@ population_size=12
 nb_cycle=200
 crossover=crossovers.crossover1
 mutation=mutations.mutation1
-survivor_selection=selections.survivor1
+survivor_selection=selections.bestOfAFourth
 parent_selection=selections.parent1
 
 launch(vector_size,population_size,nb_cycle,nb_cycle_step,crossover,mutation,survivor_selection,parent_selection)
