@@ -6,7 +6,6 @@ Evolutionary Algorithm used to solve the one-max problem. It can be used for any
  - [x] save system
  - [x] plot system
  - [x] end conditions
- - [ ] mutation functions
  - [x] fitness functions
  - [ ] selection functions
  - [ ] mutation functions
