@@ -1,12 +1,8 @@
 import fitness
 import random
-#parent selection functions
-#testing function
-def parent1(population):
-    return population[-4:]
 
-#survivor selection functions
-def survivor1(population,offspring):
+#survivor selection functions ===> INSERTION
+def highFitnessFirst(population,offspring):
     for member in offspring:
         fitness.insert(member,population)
         population.pop(0)
@@ -18,13 +14,27 @@ def bestOfAFourth(population,offspring):
     for member in offspring:
         fitness.insert(member,population)
     
-    print(population)
-
     selecteds=random.sample(range(0, int(len(population)-1)),int(len(population)/4))
-    print(selecteds)
     selecteds=sorted(selecteds)[-out:]
-    print(selecteds)
     for i in range (out):
         population.pop(selecteds[i]-i)
 
-    print(population)
+def randomInsertion(population,offspring):
+
+    out=len(population)
+
+    for member in offspring:
+        fitness.insert(member,population)
+    
+
+    while len(population<out):
+        population.pop(random.randint(0,len(population)-1))
+
+# parent selection ====> SELECTION
+# select parents depending on their fitness
+def bestFirst(qty,population):
+    return population[-qty:]
+
+# select parents randomly
+def randomSelection(qty,population):
+    return random.choice(population,k=qty)
