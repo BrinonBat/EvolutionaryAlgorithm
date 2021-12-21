@@ -46,7 +46,7 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         seeds=reader[0]
 
     #generate CSV
-    UI.createCSV(li_select[parameters[0]].__name__,li_cross[parameters[1]].__name__,li_mutate[parameters[2]].__name__,li_insert[parameters[3]].__name__,parameters[4],parameters[5],seeds)
+    csv_name=UI.createCSV(li_select[parameters[0]].__name__,li_cross[parameters[1]].__name__,li_mutate[parameters[2]].__name__,li_insert[parameters[3]].__name__,parameters[4],parameters[5],seeds)
 
     #chrono initialization
     start=time.time()
@@ -54,8 +54,10 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
 
     #iterate for each seed
     for seed_num in range(0,len(seeds)):
-
+        if verbose: print("seed is "+seed)
+        
         #initialize
+        results.append([])
         seed=seeds[seed_num]
         random.seed(seed)    
         
@@ -67,22 +69,24 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         for i in range(nb_cycle):
             iterate(verbose,parameters,population)
             if verbose: print("seed "+str(seed_num+1)+"/"+str(len(seeds))+"; iteration "+str(i)+" done")
-            #save the results every X generation so we can prompt it on a graph
-            #if((i+1)%nb_cycle_register==0):
-                #max=UI.updateCSV(i+1,population,csv_name)
-            #    if(max==1.0):break 
 
-        #once finished, we save the results of this try and we show it
-        if verbose: print("seed is "+seed)
+            #save the results every X generation so we can prompt it on a graph
+            if((i+1)%nb_cycle_register==0):
+                results[seed_num].append(fitness.maxFit(population))
+                
+        #show the time spent and time remaining
         duration=(time.time()-end)
         end=time.time()
         remaining=((time.time()-start)*(len(seeds)-(seed_num+1)))/(seed_num+1)
         print("seed "+str(seed_num+1)+"/"+str(len(seeds))+" finished in %.2f s " %duration +" approximately %.2f s remaining" %remaining)
-    print("finished in %.2f s" %(time.time()-start))
 
+    #once finished, we save the results
+    print("finished in %.2f s" %(time.time()-start))
+    UI.register(nb_cycle,nb_cycle_register,results,csv_name)
+    UI.show(csv_name)
 nb_cycle_step=5 #step bewteen each registration in the local data file
 vector_size=100 # between 100 and 1000
 population_size=20
-nb_cycle=20000
+nb_cycle=20001
 verbose=False
 launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters)

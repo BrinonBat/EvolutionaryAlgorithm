@@ -1,38 +1,35 @@
+from statistics import mean
 import fitness,csv,datetime
 import matplotlib.pyplot as plt
+import numpy as np
 #generate a name for the CSV of the current try
 def generateCSVName():
     return str(datetime.datetime.now())
 
 #create the CSV of the current try
-def createCSV(crossover_name,mutation_name,survivor_selection_name,parent_selection_name):
+def createCSV(selection_name,crossover_name,mutation_name,insertion_name,cross_proba,mutate_proba,seeds):
     csv_name=generateCSVName()
     with open("V1.0.0/results/"+csv_name+".csv", 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';',dialect='unix',quoting=csv.QUOTE_NONE)
-        csv_writer.writerow(["crossover","mutation","survivor_selection","parent_selection"])
-        csv_writer.writerow([crossover_name,mutation_name,survivor_selection_name,parent_selection_name])
+        csv_writer.writerow(["selection","crossover","mutation","insertion","crossover_proba","mutation_proba"])
+        csv_writer.writerow([selection_name,crossover_name,mutation_name,insertion_name,cross_proba,mutate_proba])
         csv_writer.writerow("")
-        csv_writer.writerow(["cycle_number","min","mean","max","std_deviation"])
+        csv_writer.writerow(["generation","min","mean","max","stddev"]+seeds)
     return csv_name
 
 #update the local CSV of the current try
 #CSV format line is {cycle_number;min;mean;max;std_deviation}
-def updateCSV(cycle_number,population,csv_name):
-    stats=fitness.evaluation(population)
+def register(nb_iter,iter_step,results,csv_name):
+    
     with open("V1.0.0/results/"+csv_name+".csv", 'a', newline='') as csv_file:
+        results=np.array(results)
         csv_writer = csv.writer(csv_file, delimiter=';',dialect='unix',quoting=csv.QUOTE_NONE)
-        csv_writer.writerow([cycle_number]+stats)
-    return stats[2]
-
-
-#save the results in the global CSV to compare with other configurations
-#CSV's first line: {Version;vector_size;population_size;nb_cycle;crossover;mutation;survivor_selection;parents_selection;min;mean;max;std_deviation}
-def saveResults(vector_size,population_size,nb_cycle,crossover_name,mutation_name,survivor_selection_name,parent_selection_name,final_stats):
-    print(final_stats)
-    with open('global.csv', 'a', newline='') as csv_file:
-        csv_writer = csv.writer(csv_file, delimiter=';',dialect='unix',quoting=csv.QUOTE_NONE)
-        csv_writer.writerow(["1.0.0",str(vector_size),str(population_size),str(nb_cycle),crossover_name,mutation_name,survivor_selection_name,parent_selection_name]+final_stats)
-        print("sauvegarde du résultat effectuée")
+        for rep_num in range(0,nb_iter,iter_step):
+            fitnesses_at_step=(results[:,int(rep_num/iter_step)-1]).tolist()
+            #print(fitnesses_at_step+" IS FOR ")
+            line=[rep_num]+fitness.evaluation(fitnesses_at_step)+fitnesses_at_step
+            csv_writer.writerow(line)
+        
 
 
 def show(csv_name):
@@ -52,13 +49,15 @@ def show(csv_name):
             stddevs.append(float(row[4]))
 
     #generate associated plot
+    means=np.array(means)
+    stddevs=np.array(stddevs)
     plt.plot(cycles,mins,label="min")
     plt.plot(cycles,means,label="mean")
     plt.plot(cycles,maxs,label="max")
-    plt.plot(cycles,stddevs,label="stddev")
+    plt.fill_between(cycles,means-stddevs,means+stddevs,alpha=.3)
     plt.axis([0,cycles[-1],0,1])
     plt.xlabel("cycles")
-    plt.xticks(cycles)
+    plt.xticks(cycles[1::500])
     plt.ylabel("value")
     plt.grid()
     plt.legend()
