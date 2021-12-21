@@ -13,9 +13,8 @@ Evolutionary Algorithm used to solve the one-max problem. It can be used for any
  - [ ] selection functions
  - [x] 30 random seeds
  - [x] print only the time spent and remaining
- - [ ] a file with different operator names by operator type (+ random seeds)
  - [ ] list configurations to be tested
- - [ ] launch instances with all the seed, and THEN make a graph (mean of the means)
+ - [x] launch instances with all the seed, and THEN make a graph (mean of the means)
  - [ ] make a new version with evolutive changes on mutations
  - [ ] tests on it
 
