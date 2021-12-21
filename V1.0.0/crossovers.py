@@ -4,23 +4,30 @@ import random as rand
 #   parentSelect : parent selection function
 #   RETURN : offspring
 def crossoverAtFour(population,parentSelect):
-    parents=parentSelect(4,population)
+    parents=parentSelect(2,population)
     offspring=[]
-    new1=parents[0][0:4]+parents[1][4:]
-    new2=parents[2][0:4]+parents[3][4:]
-    offspring.append(new1)
-    offspring.append(new2)
+    new_1=parents[0][:4]+parents[1][4:]
+    new_2=parents[1][:4]+parents[0][4:]
+    offspring.append(new_1)
+    offspring.append(new_2)
     return offspring
 
 def randomCross(population,parentSelect):
     parents=parentSelect(2,population)
     pos=rand.randint(0,len(parents[0])-1)
-    print("pos is "+str(pos))
-    new=parents[0][:pos]+parents[1][pos:]
-    return [new] #offspring
+    offspring=[]
+    new_1=parents[0][:pos]+parents[1][pos:]
+    new_2=parents[1][:pos]+parents[0][pos:]
+    offspring.append(new_1)
+    offspring.append(new_2)
+    return offspring #offspring
 
 def crossAtHalf(population,parentSelect):
     parents=parentSelect(2,population)
     pos=int(len(parents[0])/2)
-    new=parents[0][:pos]+parents[1][pos:]
-    return [new] #offspring
+    offspring=[]
+    new_1=parents[0][:pos]+parents[1][pos:]
+    new_2=parents[1][:pos]+parents[0][pos:]
+    offspring.append(new_1)
+    offspring.append(new_2)
+    return offspring #offspring
