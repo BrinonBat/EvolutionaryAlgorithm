@@ -1,6 +1,6 @@
 import random as rand
 import csv
-with open('seeds.csv','a',newline='') as csvfile:
+with open('seeds.csv','w',newline='') as csvfile:
     csv_writer = csv.writer(csvfile, delimiter=' ',dialect='unix',quoting=csv.QUOTE_NONE)
     seeds=[]
     for i in range(30):
