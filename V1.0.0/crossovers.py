@@ -21,6 +21,6 @@ def randomCross(population,parentSelect):
 
 def crossAtHalf(population,parentSelect):
     parents=parentSelect(2,population)
-    pos=len(parents[0])/2
+    pos=int(len(parents[0])/2)
     new=parents[0][:pos]+parents[1][pos:]
     return [new] #offspring
