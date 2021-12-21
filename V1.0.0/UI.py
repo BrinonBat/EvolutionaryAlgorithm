@@ -20,13 +20,10 @@ def createCSV(selection_name,crossover_name,mutation_name,insertion_name,cross_p
 #update the local CSV of the current try
 #CSV format line is {cycle_number;min;mean;max;std_deviation}
 def register(nb_iter,iter_step,results,csv_name):
-    
     with open("V1.0.0/results/"+csv_name+".csv", 'a', newline='') as csv_file:
-        results=np.array(results)
         csv_writer = csv.writer(csv_file, delimiter=';',dialect='unix',quoting=csv.QUOTE_NONE)
-        for rep_num in range(0,nb_iter,iter_step):
-            fitnesses_at_step=(results[:,int(rep_num/iter_step)-1]).tolist()
-            #print(fitnesses_at_step+" IS FOR ")
+        for rep_num in range(0,nb_iter+1,iter_step):
+            fitnesses_at_step=(results[:,int(rep_num/iter_step)]).tolist()
             line=[rep_num]+fitness.evaluation(fitnesses_at_step)+fitnesses_at_step
             csv_writer.writerow(line)
         

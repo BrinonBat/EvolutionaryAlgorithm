@@ -1,8 +1,5 @@
 import crossovers,mutations,selections,fitness,UI,time
-import random,csv
-
-#choosed 16 bits at first, but can switch to 
-# 100 iteration, a print every 5 iteration
+import random,csv,numpy
 
 li_select=[selections.bestFirst,selections.randomSelection]
 li_cross=[crossovers.crossAtHalf, crossovers.randomCross]
@@ -38,13 +35,16 @@ def iterate(verbose,parameters,population):
 #   parameters: numbers corresponding to the functions applied and the mutation&crossovers probabilities
 def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parameters):
     
-    results=[]
+    
 
     #get the seeds
     with open ('seeds.csv','r') as csv_file:
         reader = list(csv.reader(csv_file,delimiter=" "))
         seeds=reader[0]
-
+    results=numpy.full((len(seeds),int(nb_cycle/nb_cycle_register)+1),1.0)
+    results[:,0]=0
+    #if verbose : print("array of results at start is "+str(results))
+    print("array of results at start is "+str(results))
     #generate CSV
     csv_name=UI.createCSV(li_select[parameters[0]].__name__,li_cross[parameters[1]].__name__,li_mutate[parameters[2]].__name__,li_insert[parameters[3]].__name__,parameters[4],parameters[5],seeds)
 
@@ -57,7 +57,6 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         if verbose: print("seed is "+seed)
         
         #initialize
-        results.append([])
         seed=seeds[seed_num]
         random.seed(seed)    
         
@@ -66,13 +65,15 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         #if verbose: print("pop size at first:"+str(len(population)))
 
         #start the algorithm
-        for i in range(nb_cycle):
+        for i in range(1,nb_cycle+1):
             iterate(verbose,parameters,population)
             if verbose: print("seed "+str(seed_num+1)+"/"+str(len(seeds))+"; iteration "+str(i)+" done")
 
             #save the results every X generation so we can prompt it on a graph
-            if((i+1)%nb_cycle_register==0):
-                results[seed_num].append(fitness.maxFit(population))
+            max=fitness.maxFit(population)
+            if(max==1.0) : break
+            if(i%nb_cycle_register==0):
+                results[seed_num][int(i/nb_cycle_register)]=max
                 
         #show the time spent and time remaining
         duration=(time.time()-end)
@@ -87,6 +88,6 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
 nb_cycle_step=5 #step bewteen each registration in the local data file
 vector_size=100 # between 100 and 1000
 population_size=20
-nb_cycle=20001
+nb_cycle=20000
 verbose=False
 launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters)
