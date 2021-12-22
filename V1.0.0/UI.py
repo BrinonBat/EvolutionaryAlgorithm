@@ -53,7 +53,7 @@ def show(csv_name):
     plt.plot(cycles,maxs,label="max")
     plt.fill_between(cycles,means-stddevs,means+stddevs,alpha=.3)
     plt.axis([0,cycles[-1],0,1])
-    plt.xlabel("cycles")
+    plt.xlabel("generation")
     plt.xticks(cycles[1::500])
     plt.ylabel("value")
     plt.grid()
