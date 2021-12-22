@@ -1,10 +1,10 @@
 import crossovers,mutations,selections,fitness,UI,time
 import random,csv,numpy
 
-li_select=[selections.bestFirst,selections.randomSelection]
-li_cross=[crossovers.crossAtHalf, crossovers.randomCross]
-li_mutate=[mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip,mutations.bitFlip] 
-li_insert=[selections.highFitnessFirst,selections.bestOfAFourth,selections.randomInsertion]
+li_select=[selections.randomSelection,selections.bestFirst]
+li_cross=[crossovers.randomCross,crossovers.crossAtHalf]
+li_mutate=[mutations.bitFlip,mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip] 
+li_insert=[selections.randomInsertion,selections.highFitnessFirst,selections.bestOfAFourth]
 parameters=[0,0,1,0,100,100] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
 
 #execute one generation
