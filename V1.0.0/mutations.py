@@ -22,7 +22,7 @@ def fiveFlip(population):
 
 #each bit have 1/nbBit chances to be flipped
 def bitFlip(population):
-    member=population[rand.randint(0,len(population)-1)]
-    for i in member:
-        if rand.randint(0,len(member)-1)==i : member[i]==int(not(member[i]))
+    for pos in range(len(population)-1):
+        for i in range(len(population[pos])-1):
+            if rand.randint(0,len(population[pos])-1)==i : population[pos][i]=int(not(population[pos][i]))
     
