@@ -5,7 +5,7 @@ li_select=[selections.randomSelection,selections.bestFirst]
 li_cross=[crossovers.randomCross,crossovers.crossAtHalf]
 li_mutate=[mutations.bitFlip,mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip] 
 li_insert=[selections.randomInsertion,selections.highFitnessFirst,selections.bestOfAFourth]
-parameters=[0,0,0,0,50,50] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
+parameters=[0,0,2,0,50,50] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
 
 #execute one generation
 #   verbose: True to print things, False to only get the results
@@ -41,6 +41,7 @@ def iterate(verbose,parameters,population):
 
 #function starting a simulation
 #   verbose: True to print things, False to only get the results
+#   vector_size: size of each individual
 #   population_size: quantity of individuals in the population
 #   nb_cycle: quantity of maximum generations  
 #   nb_cycle_register: quantity of cycles between each registration of the population
@@ -96,9 +97,11 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
     print("finished in %.2f s" %(time.time()-start))
     UI.register(nb_cycle,nb_cycle_register,results,csv_name)
     UI.show(csv_name)
+
+# choose manually the test configuration
 nb_cycle_step=5 #step bewteen each registration in the local data file
 vector_size=100 # between 100 and 1000
 population_size=20
 nb_cycle=20000
-verbose=True
+verbose=False
 launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters)
