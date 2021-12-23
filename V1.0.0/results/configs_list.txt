@@ -1,0 +1,17 @@
+full random
+[0,0,0,0,50,50] 
+
+select isolation
+[1,0,0,0,50,50]
+
+crossover isolation
+[0,1,0,0,50,50]
+
+mutation isolation
+[0,0,1,0,50,50]
+[0,0,2,0,50,50]
+[0,0,3,0,50,50]
+
+insertion isolation
+[0,0,0,1,50,50]
+[0,0,0,2,50,50]
