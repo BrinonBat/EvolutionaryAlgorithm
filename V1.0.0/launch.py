@@ -5,7 +5,7 @@ li_select=[selections.randomSelection,selections.bestFirst]
 li_cross=[crossovers.randomCross,crossovers.crossAtHalf]
 li_mutate=[mutations.bitFlip,mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip] 
 li_insert=[selections.randomInsertion,selections.highFitnessFirst,selections.bestOfAFourth]
-parameters=[0,0,1,0,100,100] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
+parameters=[0,0,0,0,50,50] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
 
 #execute one generation
 #   verbose: True to print things, False to only get the results
@@ -19,13 +19,25 @@ def iterate(verbose,parameters,population):
     cross_proba=parameters[4]
     mutate_proba=parameters[5]
 
+    modified=False
     #crossover
-    if(random.randint(1,100)<=cross_proba): offspring=cross(population,select)
-    #mutation
-    if(random.randint(1,100)<=mutate_proba):mutate(offspring)
-    if verbose : print("after mutation, offspring is "+str(offspring))
+    if(random.randint(1,100)<=cross_proba): 
+        modified=True
+        offspring=cross(population,select)
+        #mutation
+        if(random.randint(1,100)<=mutate_proba):mutate(offspring)
+    
+    #other mutation case
+    elif(random.randint(1,100)<=mutate_proba):
+        modified=True
+        offspring=select(population)
+        mutate(offspring)
+
+   
     #insertion
-    insert(population,offspring)
+    if modified : 
+        if verbose : print("offspring is "+str(offspring))
+        insert(population,offspring)
 
 #function starting a simulation
 #   verbose: True to print things, False to only get the results
@@ -43,8 +55,7 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         seeds=reader[0]
     results=numpy.full((len(seeds),int(nb_cycle/nb_cycle_register)+1),1.0)
     results[:,0]=0
-    #if verbose : print("array of results at start is "+str(results))
-    print("array of results at start is "+str(results))
+    if verbose : print("array of results at start is "+str(results))
     #generate CSV
     csv_name=UI.createCSV(li_select[parameters[0]].__name__,li_cross[parameters[1]].__name__,li_mutate[parameters[2]].__name__,li_insert[parameters[3]].__name__,parameters[4],parameters[5],seeds)
 
@@ -54,15 +65,15 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
 
     #iterate for each seed
     for seed_num in range(0,len(seeds)):
-        if verbose: print("seed is "+seed)
         
         #initialize
         seed=seeds[seed_num]
         random.seed(seed)    
+        if verbose: print("seed is "+seed)
         
         #generate population
         population=[([0]*vector_size)]*population_size
-        #if verbose: print("pop size at first:"+str(len(population)))
+        if verbose: print("pop size at first:"+str(len(population)))
 
         #start the algorithm
         for i in range(1,nb_cycle+1):
@@ -88,6 +99,6 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
 nb_cycle_step=5 #step bewteen each registration in the local data file
 vector_size=100 # between 100 and 1000
 population_size=20
-nb_cycle=20000
-verbose=False
+nb_cycle=200
+verbose=True
 launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters)
