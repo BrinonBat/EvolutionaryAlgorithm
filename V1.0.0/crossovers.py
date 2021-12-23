@@ -3,7 +3,7 @@ import random as rand
 #   popultion : current population
 #   parentSelect : parent selection function
 #   RETURN : offspring
-def crossoverAtFour(population,parentSelect):
+def crossAtFour(population,parentSelect):
     parents=parentSelect(population)
     offspring=[]
     new_1=parents[0][:4]+parents[1][4:]
