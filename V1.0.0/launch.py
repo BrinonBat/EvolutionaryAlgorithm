@@ -99,6 +99,6 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
 nb_cycle_step=5 #step bewteen each registration in the local data file
 vector_size=100 # between 100 and 1000
 population_size=20
-nb_cycle=200
+nb_cycle=20000
 verbose=True
 launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters)
