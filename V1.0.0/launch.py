@@ -2,10 +2,10 @@ import crossovers,mutations,selections,fitness,UI,time
 import random,csv,numpy
 
 li_select=[selections.randomSelection,selections.bestFirst]
-li_cross=[crossovers.randomCross,crossovers.crossAtHalf]
+li_cross=[crossovers.randomCross,crossovers.crossAtHalf,crossovers.crossAtFour]
 li_mutate=[mutations.bitFlip,mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip] 
 li_insert=[selections.randomInsertion,selections.highFitnessFirst,selections.bestOfAFourth]
-parameters=[0,0,2,0,50,50] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
+parameters=[1,1,3,2,90,90] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
 
 #execute one generation
 #   verbose: True to print things, False to only get the results
@@ -100,7 +100,7 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
 
 # choose manually the test configuration
 nb_cycle_step=5 #step bewteen each registration in the local data file
-vector_size=100 # between 100 and 1000
+vector_size=300 # between 100 and 1000
 population_size=20
 nb_cycle=20000
 verbose=False
