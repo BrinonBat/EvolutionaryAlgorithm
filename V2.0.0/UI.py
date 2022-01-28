@@ -26,7 +26,10 @@ def register(csv_path,nb_iter,iter_step,results):
         for rep_num in range(0,nb_iter+1,iter_step):
             fitnesses_at_step=(results[:,int(rep_num/iter_step)]).tolist()
             line=[rep_num]+fitness.evaluation(fitnesses_at_step)+fitnesses_at_step
-            if line[2]==1.0 and score==nb_iter+1 : score=line[0] # if mean is 1.0, then score is the current generation
+            if float(line[2])>=0.99 and score==nb_iter+1 : 
+                print(" line[2] is "+str(line[2]))
+                print(float(line[2])>=0.99)
+                score=line[0] # if mean is 1.0, then score is the current generation
             csv_writer.writerow(line)
     return score
         

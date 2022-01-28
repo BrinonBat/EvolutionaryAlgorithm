@@ -94,9 +94,10 @@ def launch(vector_size,population_size,nb_cycle,nb_cycle_register):
                             #once finished, we save the results
                             print(str(parameters)+"finished in %.2f s" %(time.time()-start))
                             score=UI.register(csv_name,nb_cycle,nb_cycle_register,results)
+                            print(score)
                             #UI.show(csv_name)
                             if(score<best_parameters[1]):
-                                best_parameters[0]=parameters
+                                best_parameters[0]=parameters.copy()
                                 best_parameters[1]=score
     
     #show the best parameters
@@ -107,7 +108,7 @@ def launch(vector_size,population_size,nb_cycle,nb_cycle_register):
 
 
 nb_cycle_step=5 #step bewteen each registration in the local data file
-vector_size=100 # between 100 and 1000
+vector_size=300 # between 100 and 1000
 population_size=20
 nb_cycle=20000
 launch(vector_size,population_size,nb_cycle,nb_cycle_step)
