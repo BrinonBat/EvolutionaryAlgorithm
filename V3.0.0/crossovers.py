@@ -1,6 +1,6 @@
 import random as rand
-#crossover function
-#   popultion : current population
+#crossover functions
+#   population : current population
 #   parentSelect : parent selection function
 #   RETURN : offspring
 def crossAtFour(population,parentSelect):
