@@ -17,7 +17,9 @@ Evolutionary Algorithm used to solve the one-max problem. It can be used for any
  - [x] loop of the current seed end when the goal is reached
  - [x] list configurations to be tested
  - [x] add V2.0.0
- - [ ] make a new version with evolutive changes on mutations
+ - [x] make a new version (V3.0.0) with evolutive changes on mutations (adaptative wheel)
+ - [x] new plot to see the functions probabilities
+ - [ ] improve reward_factor (automatic adjustation)
  - [ ] tests on it
 
  ### About versions
@@ -25,3 +27,9 @@ Evolutionary Algorithm used to solve the one-max problem. It can be used for any
  V1.0.0 is used to chose a configuration manually and test it
  V2.0.0 will test every configuration possible and return the best one (average quicker)
  V3.0.0 will change the configuration during the execution to chose the one that fit the best to the moment
+ V3.1.0 changes : 
+ - now the mutation happen only when it doesn't decrease the population fitness
+ - better repartition of percentage when some function hit the minimum
+
+ V3.2.0 changes : (yet to be implemented)
+ - adaptative reward_factor
