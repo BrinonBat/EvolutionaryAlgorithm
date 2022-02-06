@@ -1,9 +1,10 @@
-import crossovers,mutations,selections,fitness,UI,time
+from copy import deepcopy
+import crossovers,mutations,selections,fitness,UI,time,wheel
 import random,csv,numpy
 
 li_select=[selections.randomSelection,selections.bestFirst]
 li_cross=[crossovers.randomCross,crossovers.crossAtHalf,crossovers.crossAtFour]
-li_mutate=[mutations.bitFlip,mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip] 
+li_mutate=[mutations.bitFlip,mutations.noFlip,mutations.oneFlip,mutations.threeFlip,mutations.fiveFlip] 
 li_insert=[selections.randomInsertion,selections.highFitnessFirst,selections.bestOfAFourth]
 parameters=[1,1,0,2,90,50] #[select_function_number, crossover_function_number, mutation_function_number, insertion_function_number,crossover_probability,mutation_probability]
 
@@ -11,10 +12,11 @@ parameters=[1,1,0,2,90,50] #[select_function_number, crossover_function_number, 
 #   verbose: True to print things, False to only get the results
 #   parameters: numbers corresponding to the functions applied and the mutation&crossovers probabilities
 #   population: individuals list to be treated
-def iterate(verbose,parameters,population):
+def iterate(verbose,parameters,population,proba_list):
+    pos=wheel.pick(proba_list)
     select=li_select[parameters[0]]
     cross=li_cross[parameters[1]]
-    mutate=li_mutate[parameters[2]]
+    mutate=li_mutate[pos]
     insert=li_insert[parameters[3]]
     cross_proba=parameters[4]
     mutate_proba=parameters[5]
@@ -39,6 +41,8 @@ def iterate(verbose,parameters,population):
         if verbose : print("offspring is "+str(offspring))
         insert(population,offspring)
 
+    return pos
+
 #function starting a simulation
 #   verbose: True to print things, False to only get the results
 #   vector_size: size of each individual
@@ -46,9 +50,12 @@ def iterate(verbose,parameters,population):
 #   nb_cycle: quantity of maximum generations  
 #   nb_cycle_register: quantity of cycles between each registration of the population
 #   parameters: numbers corresponding to the functions applied and the mutation&crossovers probabilities
-def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parameters):
+#   proba_min: the minimum probability for a mutation function to get picked by the wheel
+#   reward_factor: multiplier of the reward during wheel's update
+def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parameters,proba_min,reward_factor):
     
-    
+    #initiate the wheel record
+    wheels_by_seed=[]
 
     #get the seeds
     with open ('seeds.csv','r') as csv_file:
@@ -58,7 +65,7 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
     results[:,0]=0
     if verbose : print("array of results at start is "+str(results))
     #generate CSV
-    csv_name=UI.createCSV(li_select[parameters[0]].__name__,li_cross[parameters[1]].__name__,li_mutate[parameters[2]].__name__,li_insert[parameters[3]].__name__,parameters[4],parameters[5],seeds)
+    csv_name=UI.createCSV(li_select[parameters[0]].__name__,li_cross[parameters[1]].__name__,li_insert[parameters[3]].__name__,parameters[4],parameters[5],seeds)
 
     #chrono initialization
     start=time.time()
@@ -71,19 +78,27 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         seed=seeds[seed_num]
         random.seed(seed)    
         if verbose: print("seed is "+seed)
-        
+        proba_list=wheel.init(li_mutate)
+        max=0 #fitness at start
+        wheel_this_seed=[proba_list.copy()]
+
         #generate population
         population=[([0]*vector_size)]*population_size
         if verbose: print("pop size at first:"+str(len(population)))
 
         #start the algorithm
         for i in range(1,nb_cycle+1):
-            iterate(verbose,parameters,population)
+            pos=iterate(verbose,parameters,population,proba_list)
+            wheel_this_seed.append(proba_list.copy())
             if verbose: print("seed "+str(seed_num+1)+"/"+str(len(seeds))+"; iteration "+str(i)+" done")
 
-            #save the results every X generation so we can prompt it on a graph
+            last_max=max
             max=fitness.maxFit(population)
             if(max==1.0) : break
+            improvement=max-last_max
+            wheel.update(proba_list,proba_min,pos,improvement,reward_factor)
+
+            #save the results every X generation so we can prompt it on a graph
             if(i%nb_cycle_register==0):
                 results[seed_num][int(i/nb_cycle_register)]=max
                 
@@ -91,17 +106,21 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
         duration=(time.time()-end)
         end=time.time()
         remaining=((time.time()-start)*(len(seeds)-(seed_num+1)))/(seed_num+1)
+        wheels_by_seed.append(deepcopy(wheel_this_seed))
         print("seed "+str(seed_num+1)+"/"+str(len(seeds))+" finished in %.2f s " %duration +" approximately %.2f s remaining" %remaining)
-
+        #print(wheels_by_seed)
+    
     #once finished, we save the results
     print("finished in %.2f s" %(time.time()-start))
     UI.register(nb_cycle,nb_cycle_register,results,csv_name)
     UI.show(csv_name)
-
+    UI.generateWheelsGraph(wheels_by_seed,nb_cycle)
 # choose manually the test configuration
 nb_cycle_step=5 #step bewteen each registration in the local data file
-vector_size=300 # between 100 and 1000
+vector_size=100 # between 100 and 1000
 population_size=20
-nb_cycle=20000
+nb_cycle=10000
 verbose=False
-launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters)
+proba_min=5.0 # in percent
+reward_factor=5 #between 0 and 1 (0 for no changes)
+launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_step,parameters,proba_min,reward_factor)
