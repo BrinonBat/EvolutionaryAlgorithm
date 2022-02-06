@@ -18,19 +18,18 @@ def update(list_proba,proba_min, pos, improvement,reward_factor):
     ratios=list_proba.copy()
     total=0.0
     for i in range(0,len(list_proba)): # get the max
-        if i!=pos: total+=list_proba[i]
+        if i!=pos: total+=100-list_proba[i]
     for i in range(0,len(list_proba)): # generate ratios
-        if i!=pos:ratios[i]=list_proba[i]/total
+        if i!=pos:ratios[i]=(100-list_proba[i])/total
     ratios[pos]=0.0
-    
+
     if improvement>0:
         if size>1: #only if there's an operator which we can decrease the probability
             reward=float(improvement*reward_factor)
-            change=float(reward/(size-1))
             diff=0.0
             for i in range(0,len(list_proba)):
                 if(i!=pos):
-                    list_proba[i]=list_proba[i]-change
+                    list_proba[i]=list_proba[i]-(ratios[i]*reward)
                     #if an error goes below the limit, we push it to the limit and decrease the gain of the rewarded operator
                     if(list_proba[i]<proba_min):
                         diff+=proba_min-list_proba[i]
@@ -45,8 +44,8 @@ def update(list_proba,proba_min, pos, improvement,reward_factor):
             
        #apply the changes to the probabilities
         for i in range(0,len(list_proba)):
-            if(i==pos): list_proba[i]=list_proba[i]-(reward*(len(list_proba)-1))
-            else: list_proba[i]+=reward
+            if(i==pos): list_proba[i]-=reward*(len(list_proba)-1)
+            else: list_proba[i]+=reward*((1.0-ratios[i])/(len(list_proba)-2))
     
     #verification & correction if ther's some round error
     sum_proba=sum(list_proba)
