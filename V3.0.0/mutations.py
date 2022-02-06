@@ -1,5 +1,9 @@
 import random as rand
 
+#does nothing
+def noFlip(population):
+    pass
+
 #Change the value of one of the bit
 def oneFlip(population):
     member=population[rand.randint(0,len(population)-1)]
