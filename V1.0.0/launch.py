@@ -48,8 +48,6 @@ def iterate(verbose,parameters,population):
 #   parameters: numbers corresponding to the functions applied and the mutation&crossovers probabilities
 def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parameters):
     
-    
-
     #get the seeds
     with open ('seeds.csv','r') as csv_file:
         reader = list(csv.reader(csv_file,delimiter=" "))
