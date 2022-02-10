@@ -36,5 +36,5 @@ Evolutionary Algorithm used to solve the one-max problem. It can be used for any
  - [x] new plot to see the functions probabilities
  - [x] add V3.1.0
  - [ ] improve reward_factor (automatic adjustation)
- - [ ] tests on it
+ - [x] tests on it
 
