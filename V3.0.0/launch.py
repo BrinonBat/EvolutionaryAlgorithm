@@ -117,7 +117,7 @@ def launch(verbose,vector_size,population_size,nb_cycle,nb_cycle_register,parame
     UI.generateWheelsGraph(wheels_by_seed,nb_cycle)
 # choose manually the test configuration
 nb_cycle_step=5 #step bewteen each registration in the local data file
-vector_size=100 # between 100 and 1000
+vector_size=300 # between 100 and 1000
 population_size=20
 nb_cycle=10000
 verbose=False
